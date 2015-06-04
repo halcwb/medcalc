@@ -18,6 +18,7 @@ User Stories:
 
 Engineering tasks:
 - Automated build
+- Static code analysis (Lint)
 - Continuous Integrations
 - Server side testing
 - Client side testing

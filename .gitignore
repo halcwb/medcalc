@@ -1,2 +1,5 @@
 # ignore local WebStorm settings
 .idea/workspace.xml
+
+# ingore node build
+node_modules/**/.bin/**

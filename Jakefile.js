@@ -13,16 +13,14 @@
 
         var lint = require("./build/lint/lint_runner.js");
 
-        var list = new jake.FileList();
-        list.include("**/*.js");
-        list.exclude("node_modules");
-        var options = getOptions();
-        var globals = getGlobals();
-        lint.validateFileList(list.toArray(), options, globals);
+        var files = new jake.FileList();
+        files.include("**/*.js");
+        files.exclude("node_modules");
+        lint.validateFileList(files.toArray(), getOptions(), getGlobals());
     });
 
     function getOptions() {
-        var options = {
+        return {
             bitwise: true,
             curly: false,
             eqeqeq: true,
@@ -39,16 +37,14 @@
             trailing: true,
             node: true
         };
-        return options;
     }
 
     function getGlobals() {
-        var globals = {
+        return {
             describe: false,
             it: false,
             beforeEach: false,
             afterEach: false
         };
-        return globals;
     }
 })();

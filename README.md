@@ -2,9 +2,15 @@
 
 This is a lab project to create a medical calculator web app
 
+## To build on Windows:
+* Assumes presence of Node.js
+* Assumes presence of Git
+* Clone repo
+
 ## To Build:
 * Assumes presence of Node.js
 * Run ./jake.sh to build
+
 
 ## First things to do:
 1. Install Node.js

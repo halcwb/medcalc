@@ -23,7 +23,7 @@
     desc("Integrate");
     task("integrate", ["default"], function () {
         console.log("Integrate");
-        console.log("1. Make sure git status is clean");
+        console.log("1. Make sure git status is clean and can be pulled from integration box");
         console.log("2. Build on integration box");
         console.log("  a. Open integration box");
         console.log("  b. git pull");

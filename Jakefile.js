@@ -16,7 +16,8 @@
         var files = new jake.FileList();
         files.include("**/*.js");
         files.exclude("node_modules");
-        lint.validateFileList(files.toArray(), getOptions(), getGlobals());
+        var pass = lint.validateFileList(files.toArray(), getOptions(), getGlobals());
+        if (!pass) fail("Lint failed");
     });
 
     desc("Integrate");

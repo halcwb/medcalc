@@ -3,22 +3,25 @@ MedCalc Medical Calculator App
 Setting op a lab experiment using continuous integration and best practices for a medical calculator app.
 
 Minimum Marketing Feature:
-- Medical calculator home page
-- Enter patient charecteristics: age and weight
+- > Medical calculator home page
+- Enter patient characteristics: age and weight
 - Calculate normal weight according to age
 - Add APLS calculations
 - Add more calculations
 - Let user add calculations
 
 User Stories:
-- "Hello world server"
+- > "Hello world server"
 - "Hello world client"
 - Support multiple users
 - Add patient details
 
 Engineering tasks:
-- Automated build
-- Static code analysis (Lint)
-- Continuous Integrations
+- > Automated build
+    - > Static code analysis (Lint)
+    - > Continuous Integration
 - Server side testing
 - Client side testing
+
+To Do on current task:
+- Make build fail when lint fails

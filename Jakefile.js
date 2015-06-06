@@ -33,17 +33,17 @@
 
     desc("Integrate");
     task("integrate", ["default"], function () {
-        console.log("Integrate");
-        console.log("1. Make sure git status is clean and can be pulled from integration box");
-        console.log("2. Build on integration box");
+        console.log("Integrate (master is last good build)");
+        console.log("1. Make sure git status is clean");
+        console.log("2. Push development to origin");
+        console.log("3. Build on integration box");
         console.log("  a. Open integration box");
-        console.log("  b. git pull from development");
+        console.log("  b. git pull from development from origin");
         console.log("  c. jake");
         console.log("  d. If jake fails, stop! Start over!");
-        console.log("3. git checkout master");
-        console.log("4. git merge development --no-ff --log");
-        console.log("5. git checkout development");
-
+        console.log("4. git checkout master");
+        console.log("5. git merge development --no-ff --log");
+        console.log("6. git checkout development");
     });
 
     function getOptions() {

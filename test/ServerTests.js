@@ -17,9 +17,27 @@ exports.setUp = function (begin) {
 };
 
 exports.tearDown = function (done) {
-    server.stop(function () {
-        done();
+    server.stop(done);
+};
+
+
+exports.test_serverStartWithoutPortThrowsException = function (test) {
+    server.stop();
+    test.throws(function () {
+        server.start();
     });
+    server.start(PORT);
+    test.done();
+};
+
+
+exports.test_serverStopBeforeStartThrowsException = function (test) {
+    server.stop();
+    test.throws(function () {
+        server.stop();
+    });
+    server.start(PORT);
+    test.done();
 };
 
 exports.test_serverReturnsResponse = function (test) {
@@ -50,7 +68,7 @@ exports.test_serverReturnsHelloWorld = function (test) {
         response.on('data', function (data) {
             // Check if the response contains hello world
             console.log('got data', data);
-//            test.equals('Hello World', data, 'Expected response received');
+            test.equals('Hello World', data, 'Expected response received');
         });
 
         response.on('end', function () {

@@ -4,6 +4,7 @@ var http = require('http');
 
 var server = http.createServer();
 
+
 server.on("request", function (request, response) {
     console.log("Received request");
 

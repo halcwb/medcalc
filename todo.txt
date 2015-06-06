@@ -12,7 +12,7 @@ Minimum Marketing Feature:
 
 User Stories:
 - > "Hello world server"
-- "Hello world client"
+- > "Hello world client"
 - Support multiple users
 - Add patient details
 
@@ -28,4 +28,5 @@ To Do on current task:
 
 
 Future ideas:
+- Create fail fast code
 - Abstract framework out?

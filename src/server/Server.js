@@ -16,7 +16,7 @@ exports.start = function (port) {
     server.on("request", function (request, response) {
         console.log("Received request");
 
-        response.end('test');
+        response.end('Hello World');
     });
 
     server.listen(port);

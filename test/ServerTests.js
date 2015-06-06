@@ -68,7 +68,7 @@ exports.test_serverReturnsHelloWorld = function (test) {
         response.on('data', function (data) {
             // Check if the response contains hello world
             console.log('got data', data);
-//            test.equals('Hello World', data, 'Expected response received');
+            test.equals('Hello World', data, 'Expected response received');
         });
 
         response.on('end', function () {

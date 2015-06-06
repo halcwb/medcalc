@@ -6,6 +6,7 @@
 
 var http = require("http");
 var server;
+var started = false;
 
 exports.start = function (port) {
     if (!port) throw 'No port defined';
@@ -20,9 +21,15 @@ exports.start = function (port) {
     });
 
     server.listen(port);
+    started = true;
 };
 
 exports.stop = function (callback) {
     console.log('Server is closing');
-    if (server) server.close(callback);
+    if (server && started) {
+        started = false;
+        server.close(callback);
+    } else {
+        throw "Server was not started or already closed";
+    }
 };

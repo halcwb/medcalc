@@ -17,9 +17,16 @@ exports.setUp = function (begin) {
 };
 
 exports.tearDown = function (done) {
-    server.stop(function () {
-        done();
+    server.stop(done);
+};
+
+exports.test_serverStopBeforeStartThrowsException = function (test) {
+    server.stop();
+    test.throws(function () {
+        server.stop();
     });
+    server.start(PORT);
+    test.done();
 };
 
 exports.test_serverReturnsResponse = function (test) {

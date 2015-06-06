@@ -23,5 +23,5 @@ exports.start = function (port) {
 
 exports.stop = function (callback) {
     console.log('Server is closing');
-    server.close(callback);
+    if (server) server.close(callback);
 };

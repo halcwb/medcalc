@@ -37,12 +37,12 @@
         console.log("1. Make sure git status is clean and can be pulled from integration box");
         console.log("2. Build on integration box");
         console.log("  a. Open integration box");
-        console.log("  b. git pull");
+        console.log("  b. git pull from development");
         console.log("  c. jake");
         console.log("  d. If jake fails, stop! Start over!");
-        console.log("3. git checkout integration");
-        console.log("4. git merge master --no-ff --log");
-        console.log("5. git checkout master");
+        console.log("3. git checkout master");
+        console.log("4. git merge development --no-ff --log");
+        console.log("5. git checkout development");
 
     });
 

@@ -2,6 +2,9 @@
 
 This is a lab project to create a medical calculator web app
 
+## Requires
+* Node v 0.10.26
+
 ## To build on Windows:
 * Assumes presence of Node.js
 * Assumes presence of Git

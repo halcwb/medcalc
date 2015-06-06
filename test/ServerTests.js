@@ -4,11 +4,15 @@
 
 "use strict";
 
+var PORT = '3000';
+
 var http = require('http');
 var server = require("../src/server/Server.js");
 
+var request = function () { return http.get('http://localhost:' + PORT); };
+
 exports.setUp = function (begin) {
-    server.start();
+    server.start(PORT);
     begin();
 };
 
@@ -20,7 +24,7 @@ exports.tearDown = function (done) {
 
 exports.test_serverReturnsResponse = function (test) {
     // Make a request
-    var req = http.get("http://localhost:3000");
+    var req = request();
     req.on('response', function (response) {
         // Check if there is a response
         test.ok(response, 'Expected response received');
@@ -31,12 +35,13 @@ exports.test_serverReturnsResponse = function (test) {
         // Fail test when error
         console.log('Got error:' + e.message);
         test.fail(e);
+        test.done();
     });
 };
 
 exports.test_serverReturnsHelloWorld = function (test) {
     // Make a request
-    var req = http.get("http://localhost:3000");
+    var req = request();
     req.on('response', function (response) {
         // Check the status code
         test.equals(200, response.statusCode);
@@ -56,6 +61,7 @@ exports.test_serverReturnsHelloWorld = function (test) {
         // Fail test when error
         console.log('Got error:' + e.message);
         test.fail(e);
+        test.done();
     });
 };
 

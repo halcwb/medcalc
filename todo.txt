@@ -24,5 +24,7 @@ Engineering tasks:
 - Client side testing
 
 To Do on current task:
-- Start setting up test framework
+- make build fail when test fails
+
+Future ideas:
 - Abstract framework out?

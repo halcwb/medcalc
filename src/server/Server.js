@@ -8,6 +8,7 @@ var http = require("http");
 var server;
 
 exports.start = function (port) {
+    if (!port) throw 'No port defined';
     console.log('Server starts');
 
     server = http.createServer();

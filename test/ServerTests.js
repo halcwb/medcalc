@@ -20,6 +20,17 @@ exports.tearDown = function (done) {
     server.stop(done);
 };
 
+
+exports.test_serverStartWithoutPortThrowsException = function (test) {
+    server.stop();
+    test.throws(function () {
+        server.start();
+    });
+    server.start(PORT);
+    test.done();
+};
+
+
 exports.test_serverStopBeforeStartThrowsException = function (test) {
     server.stop();
     test.throws(function () {

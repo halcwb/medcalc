@@ -3,7 +3,7 @@
 
 (function () {
     desc("Default build task");
-    task("default", ["lint"], function () {
+    task("default", ["lint", "test"], function () {
         console.log("\n\nBuild OK");
     });
 
@@ -18,6 +18,11 @@
         files.exclude("node_modules");
         var pass = lint.validateFileList(files.toArray(), getOptions(), getGlobals());
         if (!pass) fail("Lint failed");
+    });
+
+    desc("Test everything");
+    task("test", [], function () {
+        console.log("Tests go here");
     });
 
     desc("Integrate");

@@ -24,4 +24,5 @@ Engineering tasks:
 - Client side testing
 
 To Do on current task:
-- Make build fail when lint fails
+- Start setting up test framework
+- Abstract framework out?

@@ -20,11 +20,12 @@ Engineering tasks:
 - > Automated build
     - > Static code analysis (Lint)
     - > Continuous Integration
-- Server side testing
+-> Server side testing
+- Create very simple http server
 - Client side testing
 
 To Do on current task:
-- make build fail when test fails
+
 
 Future ideas:
 - Abstract framework out?

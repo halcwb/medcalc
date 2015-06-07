@@ -2,13 +2,16 @@
 "use strict";
 
 (function () {
+
+    var NODE_VERSION =  "v0.12.4";
+
     desc("Default build task");
     task("default", ["lint", "test"], function () {
         console.log("\n\nBuild OK");
     });
 
     desc("Lint everything");
-    task("lint", [], function () {
+    task("lint", ["node"], function () {
         console.log("Lint is running");
 
         var lint = require("./build/lint/lint_runner.js");
@@ -21,8 +24,8 @@
     });
 
     desc("Test everything");
-    task("test", [], function () {
-        console.log("Tests go here");
+    task("test", ["node"], function () {
+        console.log("Start testing");
         var reporter = require("nodeunit").reporters.default;
         reporter.run(['test'], null, function (failures) {
                 if (failures) fail('tests fail!', failures);
@@ -45,6 +48,21 @@
         console.log("5. git merge development --no-ff --log");
         console.log("6. git checkout development");
     });
+
+    // desc("Check node version");
+    task("node", [], function () {
+        console.log("Checking node version");
+        var exc = jake.createExec(['node --version']);
+        exc.addListener('stdout', function (buffer) {
+            var version = buffer.toString('ascii');
+            if (version.trim() !== NODE_VERSION) {
+                fail("Not the right version: " + version +
+                "should be: " + NODE_VERSION);
+            }
+            complete();
+        });
+        exc.run();
+    }, {async: true});
 
     function getOptions() {
         return {

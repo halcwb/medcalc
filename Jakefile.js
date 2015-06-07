@@ -7,12 +7,12 @@
 
     desc("Default build task");
     task("default", ["lint", "test"], function () {
-        console.log("\n\nBuild OK");
+        console.log("\n\nBuild OK\n");
     });
 
     desc("Lint everything");
     task("lint", ["node"], function () {
-        console.log("Lint is running");
+        console.log("\n\nLint is running\n");
 
         var lint = require("./build/lint/lint_runner.js");
 
@@ -25,7 +25,7 @@
 
     desc("Test everything");
     task("test", ["node"], function () {
-        console.log("Start testing");
+        console.log("\n\nStart testing");
         var reporter = require("nodeunit").reporters.default;
         reporter.run(['test'], null, function (failures) {
                 if (failures) fail('tests fail!', failures);
@@ -36,7 +36,7 @@
 
     desc("Integrate");
     task("integrate", ["default"], function () {
-        console.log("Integrate (master is last good build)");
+        console.log("\n\nIntegrate (master is last good build)");
         console.log("1. Make sure git status is clean");
         console.log("2. Push development to origin");
         console.log("3. Build on integration box");
@@ -51,18 +51,29 @@
 
     // desc("Check node version");
     task("node", [], function () {
-        console.log("Checking node version");
-        var exc = jake.createExec(['node --version']);
-        exc.addListener('stdout', function (buffer) {
-            var version = buffer.toString('ascii');
+        console.log("\nChecking node version\n");
+
+        sh("node --version", function (version) {
             if (version.trim() !== NODE_VERSION) {
                 fail("Not the right version: " + version +
-                "should be: " + NODE_VERSION);
+                    "should be: " + NODE_VERSION);
             }
             complete();
         });
-        exc.run();
+
     }, {async: true});
+
+
+    function sh(cmd, callback) {
+        console.log("> " + cmd);
+        var process = jake.createExec([cmd], {printStderr: true});
+        process.addListener('stdout', function (buffer) {
+            var version = buffer.toString('ascii');
+            callback(version);
+        });
+        process.run();
+    }
+
 
     function getOptions() {
         return {

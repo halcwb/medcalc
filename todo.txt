@@ -11,9 +11,11 @@ Minimum Marketing Feature:
 - Let user add calculations
 
 User Stories:
-- > "Hello world server"
-- > "Hello world client"
-- Support multiple users
+* Serve a one-file home-page
+- Serve 404 for everything else
+- Marketing copy
+- Publish to internet
+- Support multiple browsers
 - Add patient details
 
 Engineering tasks:
@@ -22,12 +24,12 @@ Engineering tasks:
     - > Continuous Integration
     - > Requiring specific node version
 -> Server side testing
+-> Serve a file
 - Create very simple http server
 - Client side testing
 
 To Do on current task:
-- Modify build script to use specific node version
-
+Serve a file from the server
 
 Future ideas:
 - Create fail fast code

@@ -20,11 +20,13 @@ Engineering tasks:
 - > Automated build
     - > Static code analysis (Lint)
     - > Continuous Integration
+    - > Requiring specific node version
 -> Server side testing
 - Create very simple http server
 - Client side testing
 
 To Do on current task:
+- Modify build script to use specific node version
 
 
 Future ideas:

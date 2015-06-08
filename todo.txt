@@ -29,6 +29,9 @@ Engineering tasks:
 - Client side testing
 
 To Do on current task:
+Spike serving a file
+TDD file serving
+design work?
 Serve a file from the server
 
 Future ideas:

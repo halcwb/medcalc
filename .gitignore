@@ -3,3 +3,6 @@
 
 # ingore node build
 node_modules/**/.bin/**
+
+# ignore generated test files
+generated/**

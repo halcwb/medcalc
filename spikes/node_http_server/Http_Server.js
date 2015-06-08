@@ -1,3 +1,7 @@
+/**
+ * Very basic example of a http server, serving a single test page
+ */
+
 "use strict";
 
 var http = require('http');

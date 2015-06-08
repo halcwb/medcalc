@@ -1,5 +1,6 @@
 /**
  * Created by halcwb on 06/06/15.
+ * Use to quickly demonstrate basic http get actions
  */
 "use strict";
 

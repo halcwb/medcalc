@@ -6,6 +6,8 @@
 
 (function () {
     var http = require("http");
+    var fs = require("fs");
+
     var server;
     var started = false;
 
@@ -16,9 +18,16 @@
         server = http.createServer();
 
         server.on("request", function (request, response) {
-            console.log("Received request");
+            console.log("Received request", request.url);
 
-            response.end('Hello World');
+            fs.readFile("./" + request.url, function (err, data) {
+                if (err) {
+                    response.end(err.toString());
+                } else {
+                    response.end(data);
+                }
+
+            });
         });
 
         server.listen(port);

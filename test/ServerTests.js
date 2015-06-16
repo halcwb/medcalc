@@ -16,8 +16,18 @@
 
     var getHttp = function (url, testResponse, processError) {
         var req = request(url);
+        var data = "";
         req.on('response', function (response) {
-            testResponse(response);
+            response.setEncoding('utf8');
+
+            response.on('data', function (chunk) {
+               data += chunk;
+            });
+
+            response.on('end', function () {
+                testResponse(response, data);
+            });
+
         }).on('error', function (e) {
             // Fail test when error
             console.log('Got error:' + e.message);
@@ -58,13 +68,10 @@
         // Make a request
         var url = "";
         // Test the response
-        var testResponse = function (response) {
+        var testResponse = function (response /*, data*/) {
             // Check if there is a response
             test.ok(response, 'Expected response received');
-
-            response.on('data', function () {
-                test.done();
-            });
+            test.done();
         };
         // Process the error
         var processError = function (e) {
@@ -86,23 +93,12 @@
         fs.writeFileSync(testFile, testData);
         test.ok(fs.existsSync(testFile), "File [" + testFile + "] should have been created");
 
-
         // Make a request
-        var testResponse =  function (response) {
+        var testResponse =  function (response, data) {
             // Check the status code
             test.equals(200, response.statusCode);
-
-            response.setEncoding('utf8');
-            response.on('data', function (data) {
-                // Check if the response contains hello world
-                console.log('got data', data);
-                test.equals(testData, data, 'Expected response received');
-            });
-
-            response.on('end', function () {
-                test.done();
-            });
-
+            test.equals(testData, data, 'Expected response received');
+            test.done();
         };
 
         var processError = function (e) {
@@ -123,7 +119,7 @@
 
     exports.test_serverReturns404ForNonExistingUrl = function (test) {
         // Test the response
-        var testResponse = function (response) {
+        var testResponse = function (response /*, data */) {
             // Check the status code, should return a 404
             test.equals(404, response.statusCode);
             test.done();

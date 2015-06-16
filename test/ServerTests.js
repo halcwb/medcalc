@@ -14,6 +14,17 @@
 
     var request = function (file) { return http.get('http://localhost:' + PORT + "/" + file); };
 
+    var getHttp = function (url, testResponse, processError) {
+        var req = request(url);
+        req.on('response', function (response) {
+            testResponse(response);
+        }).on('error', function (e) {
+            // Fail test when error
+            console.log('Got error:' + e.message);
+            processError(e);
+        });
+    };
+
     exports.setUp = function (begin) {
         server.start(PORT);
         begin();
@@ -45,19 +56,25 @@
 
     exports.test_serverReturnsResponse = function (test) {
         // Make a request
-        var req = request();
-        req.on('response', function (response) {
+        var url = "";
+        // Test the response
+        var testResponse = function (response) {
             // Check if there is a response
             test.ok(response, 'Expected response received');
 
-            response.on('data', function () {});
-            test.done();
-        }).on('error', function (e) {
+            response.on('data', function () {
+                test.done();
+            });
+        };
+        // Process the error
+        var processError = function (e) {
             // Fail test when error
             console.log('Got error:' + e.message);
             test.fail(e);
             test.done();
-        });
+        };
+        // Run the test
+        getHttp(url, testResponse, processError);
     };
 
 
@@ -71,8 +88,7 @@
 
 
         // Make a request
-        var req = request(testFile);
-        req.on('response', function (response) {
+        var testResponse =  function (response) {
             // Check the status code
             test.equals(200, response.statusCode);
 
@@ -87,7 +103,9 @@
                 test.done();
             });
 
-        }).on('error', function (e) {
+        };
+
+        var processError = function (e) {
             // Fail test when error
             console.log('Got error:' + e.message);
 
@@ -96,7 +114,32 @@
 
             test.fail(e);
             test.done();
-        });
+        };
+
+        // Run the test
+        getHttp(testFile, testResponse, processError);
+
+    };
+
+    exports.test_serverReturns404ForNonExistingUrl = function (test) {
+        // Test the response
+        var testResponse = function (response) {
+            // Check the status code, should return a 404
+            test.equals(404, response.statusCode);
+            test.done();
+
+        };
+
+        // Process an error
+        var processError =  function (e) {
+            // Should not get an error
+
+            test.fail(e);
+            test.done();
+        };
+
+        // Run the test
+        getHttp("foobar", testResponse, processError);
     };
 
 })();

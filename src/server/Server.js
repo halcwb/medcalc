@@ -5,6 +5,8 @@
 "use strict";
 
 (function () {
+    var INDEX = "index.html";
+
     var http = require("http");
     var fs = require("fs");
 
@@ -18,9 +20,11 @@
         server = http.createServer();
 
         server.on("request", function (request, response) {
-            console.log("Received request", request.url);
+            var url = request.url || INDEX;
+            if (url === "/") url = INDEX;
+            console.log("Received request", url);
 
-            fs.readFile("./" + request.url, function (err, data) {
+            fs.readFile("./" + url, function (err, data) {
                 if (err) {
                     response.statusCode = 404;
                     response.end(err.toString());

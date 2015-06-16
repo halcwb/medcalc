@@ -22,6 +22,7 @@
 
             fs.readFile("./" + request.url, function (err, data) {
                 if (err) {
+                    response.statusCode = 404;
                     response.end(err.toString());
                 } else {
                     response.end(data);

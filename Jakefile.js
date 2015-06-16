@@ -3,14 +3,16 @@
 
 (function () {
 
-    var TEMP_TEST_DIR = "generated/test";
+    var GENERATED = "generated";
+    var TEMP_TEST_DIR = GENERATED + "/test";
+
     var NODE_VERSION =  "v0.12.4";
 
     directory(TEMP_TEST_DIR);
 
     desc("Remove all generated files");
     task("clean", [], function () {
-        jake.rmRf("generated");
+        jake.rmRf(GENERATED);
     });
 
 

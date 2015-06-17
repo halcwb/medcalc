@@ -13,11 +13,23 @@
     var server;
     var started = false;
 
+    var serveFile = function (response, file, notFound) {
+        fs.readFile("./" + file, function (err, data) {
+            if (err) {
+                response.statusCode = 404;
+                response.end(notFound || err.toString());
+            } else {
+                response.end(data);
+            }
+        });
+    };
+
     exports.start = function (port, custom404) {
         var err404;
-
+        // Port has to be defined
         if (!port) throw 'No port defined';
 
+        // Setup custom 404 page
         if (custom404) {
             fs.readFile("./" + custom404, function (err, data) {
                 if (!err) {
@@ -26,27 +38,20 @@
             });
         }
 
-        console.log('Server starts');
-
+        // Create a server instance
         server = http.createServer();
 
+        // Setup server request response
         server.on("request", function (request, response) {
             var url = request.url || INDEX;
             if (url === "/") url = INDEX;
             console.log("Received request", url);
 
-            fs.readFile("./" + url, function (err, data) {
-                if (err) {
-                    response.statusCode = 404;
-                    err404 = err404 || err.toString();
-                    response.end(err404);
-                } else {
-                    response.end(data);
-                }
-
-            });
+            serveFile(response, url, err404);
         });
 
+        // Start the server
+        console.log('Server starts');
         server.listen(port);
         started = true;
     };

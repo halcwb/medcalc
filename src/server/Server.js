@@ -37,7 +37,6 @@
         server.on("request", function (request, response) {
             url = request.url || INDEX;
             if (url === "/") url = INDEX;
-            console.log("Received request", url);
 
             serveFile(response, url, err404);
         });

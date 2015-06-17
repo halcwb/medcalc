@@ -17,7 +17,6 @@
 
     exports.tearDown = function (done) {
         proc.on('exit', function (code, signal) {
-            console.log('process stopped with', code, signal);
             done();
         });
 
@@ -25,14 +24,13 @@
     };
 
     exports.test_smokeTest = function (test) {
-        var testResponse = function (response) {
-            console.log('test response');
+        var testResponse = function (response, data) {
             test.equals(200, response.statusCode);
+            test.ok(data.indexOf('medcalc') !== -1);
             test.done();
         };
 
         var processError = function (err) {
-            console.log('process error');
             test.fail(err.toString());
             test.done();
         };

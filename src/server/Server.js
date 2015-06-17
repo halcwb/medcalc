@@ -13,7 +13,7 @@
     var server;
     var started = false;
 
-    exports.start = function (port, custom404) {
+    exports.start = function (port, custom404, callback) {
         var err404, url;
 
         // Port has to be defined
@@ -43,13 +43,11 @@
         });
 
         // Start the server
-        console.log('Server starts');
-        server.listen(port);
+        server.listen(port, callback);
         started = true;
     };
 
     exports.stop = function (callback) {
-        console.log('Server is closing');
         if (server && started) {
             started = false;
             callback = callback || function () {};

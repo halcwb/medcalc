@@ -3,6 +3,8 @@
 
     var server = require("./Server.js");
 
-    server.start(8081, "notFoundPage.html");
-    console.log('medcalc started');
+    server.start(8081, "notFoundPage.html", function () {
+        console.log('medcalc online');
+    });
+
 })();

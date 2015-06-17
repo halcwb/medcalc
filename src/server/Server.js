@@ -14,17 +14,18 @@
     var started = false;
 
     exports.start = function (port, custom404) {
-        var err404;
+        var err404, url;
+
         // Port has to be defined
         if (!port) throw 'No port defined';
 
         // Setup custom 404 page
         if (custom404) {
             fs.readFile("./" + custom404, function (err, data) {
-                if (!err) {
-                    err404 = data;
-                } else {
+                if (err) {
                     throw err;
+                } else {
+                    err404 = data;
                 }
             });
         }
@@ -34,7 +35,7 @@
 
         // Setup server request response
         server.on("request", function (request, response) {
-            var url = request.url || INDEX;
+            url = request.url || INDEX;
             if (url === "/") url = INDEX;
             console.log("Received request", url);
 

@@ -15,22 +15,31 @@
 
 
     exports.test_startWithoutPortThrowsException = function (test) {
-        server.stop();
-        test.throws(function () {
-            server.start();
+        server.stop(function () {
+            test.throws(function () {
+                // Server is stopped and restarted
+                // without a port
+                server.start();
+            });
+            // Restart server so tearDown can stop the server
+            server.start(PORT);
+            test.done();
         });
-        server.start(PORT);
-        test.done();
     };
 
 
     exports.test_stopBeforeStartThrowsException = function (test) {
-        server.stop();
-        test.throws(function () {
-            server.stop();
+        server.stop(function () {
+            test.throws(function () {
+                // Server is stopped and
+                // cannot be stopped again
+                server.stop();
+            });
+            // Restart server so teardown can
+            // stop the server
+            server.start(PORT);
+            test.done();
         });
-        server.start(PORT);
-        test.done();
     };
 
 
@@ -147,8 +156,7 @@
     };
 
     exports.setUp = function (begin) {
-        server.start(PORT);
-        begin();
+        server.start(PORT, '', begin);
     };
 
     exports.tearDown = function (done) {

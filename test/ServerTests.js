@@ -111,7 +111,7 @@
 
     exports.test_canServeCustom404Page =function (test) {
         var custom404 = TESTDIR + "/custom404.html";
-        var expectedData = "This is custom 404 page";
+        var expectedData = "This is a custom 404 page";
 
         // Create a custom 404 file with expected data
         fs.writeFileSync(custom404, expectedData);
@@ -121,25 +121,25 @@
         server.start(PORT, custom404);
 
         var testResponse = function (response, data) {
-            // Clean up test file
-            fs.unlinkSync(custom404);
-            test.ok(!fs.existsSync(custom404), "Could not delete test file [" + custom404 + "]");
-
             test.equals(404, response.statusCode);
             test.equals(expectedData, data);
 
             test.done();
+
+            // Clean up test file
+            fs.unlinkSync(custom404);
+            test.ok(!fs.existsSync(custom404), "Could not delete test file [" + custom404 + "]");
         };
 
         // Process an error
         var processError =  function (e) {
-            // Clean up test file
-            fs.unlinkSync(custom404);
-            test.ok(!fs.existsSync(custom404), "Could not delete test file [" + custom404 + "]");
-
             // Should not get an error
             test.fail(e);
             test.done();
+
+            // Clean up test file
+            fs.unlinkSync(custom404);
+            test.ok(!fs.existsSync(custom404), "Could not delete test file [" + custom404 + "]");
         };
 
         // Run the test

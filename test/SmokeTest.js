@@ -24,17 +24,21 @@
             test.done();
         };
 
-        runServer();
-
-        setTimeout(function ()  {
-            getHttp("", testResponse, processError);
-        }, 1000);
+        runServer(function (proc) {
+            getHttp("", testResponse, processError, proc);
+        });
     };
 
-    var runServer = function () {
-        var run = process.spawn("node",  ["./src/server/Start.js"], {detached: true});
+    var runServer = function (callback) {
+        var data;
+        var run = process.spawn("node",  ["./src/server/Start.js"]);
 
-        run.stdout.on('data', function () {});
+        run.stdout.setEncoding("utf8");
+        run.stdout.on('data', function (chunk) {
+            data += chunk;
+            if (chunk.trim() === "medcalc started") callback(run);
+        });
+
         run.stderr.on('data', console.log);
 
         run.on('close', function () {});
@@ -45,7 +49,7 @@
     var request = function (file) { return http.get('http://localhost:' + PORT + "/" + file); };
 
     // ToDo: Duplicate
-    var getHttp = function (url, testResponse, processError) {
+    var getHttp = function (url, testResponse, processError, proc) {
         var req = request(url);
         var data = "";
         req.on('response', function (response) {
@@ -57,12 +61,14 @@
 
             response.on('end', function () {
                 testResponse(response, data);
+                proc.kill();
             });
 
         }).on('error', function (e) {
             // Fail test when error
             console.log('Got error:' + e.message);
             processError(e);
+            proc.kill();
         });
     };
 

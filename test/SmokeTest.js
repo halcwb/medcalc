@@ -5,15 +5,41 @@
 (function () {
     "use strict";
 
-    var PORT = '3000';
+    var PORT = '8081';
 
     var http = require("http");
+    var process = require("child_process");
 
 
     exports.test_smokeTest = function (test) {
-        test.fail("Smoke test fails");
-        test.done();
+        var testResponse = function (response) {
+            console.log('test response');
+            test.equals(200, response.statusCode);
+            test.done();
+        };
+
+        var processError = function (err) {
+            console.log('process error');
+            test.fail(err.toString());
+            test.done();
+        };
+
+        runServer();
+
+        setTimeout(function ()  {
+            getHttp("", testResponse, processError);
+        }, 1000);
     };
+
+    var runServer = function () {
+        var run = process.spawn("node",  ["./src/server/Start.js"], {detached: true});
+
+        run.stdout.on('data', function () {});
+        run.stderr.on('data', console.log);
+
+        run.on('close', function () {});
+    };
+
 
     // ToDo: Duplicate
     var request = function (file) { return http.get('http://localhost:' + PORT + "/" + file); };
@@ -39,7 +65,6 @@
             processError(e);
         });
     };
-
 
 
 })();

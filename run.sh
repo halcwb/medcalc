@@ -1,1 +1,1 @@
-node ./src/server/Start.js
+node ./src/server/Start.js $*

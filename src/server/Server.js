@@ -12,23 +12,13 @@
 
     var server;
     var started = false;
+    var notFoundFile;
 
     exports.start = function (port, custom404, callback) {
-        var err404, url;
-
+        var url;
+        notFoundFile = custom404;
         // Port has to be defined
         if (!port) throw 'No port defined';
-
-        // Setup custom 404 page
-        if (custom404) {
-            fs.readFile("./" + custom404, { encoding: 'utf8' }, function (err, data) {
-                if (err) {
-                    throw err;
-                } else {
-                    err404 = data;
-                }
-            });
-        }
 
         // Create a server instance
         server = http.createServer();
@@ -37,9 +27,8 @@
         server.on("request", function (request, response) {
             url = request.url || INDEX;
             if (url === "/") url = INDEX;
-            console.log("Received request", url);
 
-            serveFile(response, url, err404);
+            serveFile(response, url);
         });
 
         // Start the server
@@ -59,12 +48,23 @@
 
 
     var serveFile = function (response, file, notFound) {
-        fs.readFile("./" + file, function (err, data) {
+        fs.readFile("./" + file, { encoding: 'utf8' }, function (err, html) {
             if (err) {
                 response.statusCode = 404;
-                response.end(notFound || err.toString());
+
+                if (notFoundFile) {
+                    fs.readFile("./" + notFoundFile, { encoding: 'utf8' }, function (err, notFound) {
+                        if (err) {
+                            throw err;
+                        } else {
+                            response.end(notFound);
+                        }
+                    });
+                } else {
+                    response.end(err.toString());
+                }
             } else {
-                response.end(data);
+                response.end(html);
             }
         });
     };

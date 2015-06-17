@@ -21,7 +21,7 @@
 
         // Setup custom 404 page
         if (custom404) {
-            fs.readFile("./" + custom404, function (err, data) {
+            fs.readFile("./" + custom404, { encoding: 'utf8' }, function (err, data) {
                 if (err) {
                     throw err;
                 } else {

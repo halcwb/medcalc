@@ -23,6 +23,8 @@
             fs.readFile("./" + custom404, function (err, data) {
                 if (!err) {
                     err404 = data;
+                } else {
+                    throw err;
                 }
             });
         }

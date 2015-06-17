@@ -12,7 +12,7 @@ Minimum Marketing Feature:
 
 User Stories:
 * Serve a one-file home-page
-- Serve 404 for everything else
+* Serve 404 for everything else
 - Marketing copy
 - Publish to internet
 - Support multiple browsers
@@ -25,14 +25,10 @@ Engineering tasks:
     - > Requiring specific node version
 -> Server side testing
 -> Serve a file
-- Create very simple http server
+-> Create very simple http server
 - Client side testing
 
 To Do on current task:
-Spike serving a file
-TDD file serving
-design work?
-Serve a file from the server
 
 Future ideas:
 - Create fail fast code

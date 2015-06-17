@@ -13,17 +13,6 @@
     var server;
     var started = false;
 
-    var serveFile = function (response, file, notFound) {
-        fs.readFile("./" + file, function (err, data) {
-            if (err) {
-                response.statusCode = 404;
-                response.end(notFound || err.toString());
-            } else {
-                response.end(data);
-            }
-        });
-    };
-
     exports.start = function (port, custom404) {
         var err404;
         // Port has to be defined
@@ -65,5 +54,18 @@
             throw "Server was not started or already closed";
         }
     };
+
+
+    var serveFile = function (response, file, notFound) {
+        fs.readFile("./" + file, function (err, data) {
+            if (err) {
+                response.statusCode = 404;
+                response.end(notFound || err.toString());
+            } else {
+                response.end(data);
+            }
+        });
+    };
+
 
 })();

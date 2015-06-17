@@ -122,6 +122,10 @@
         server.start(PORT, testFile);
 
         var testResponse = function (response, data) {
+            // Clean up test file
+            fs.unlinkSync(testFile);
+            test.ok(!fs.existsSync(testFile), "Could not delete test file [" + testFile + "]");
+
             test.equals(404, response.statusCode);
             test.equals(expectedData, data);
 
@@ -130,6 +134,10 @@
 
         // Process an error
         var processError =  function (e) {
+            // Clean up test file
+            fs.unlinkSync(testFile);
+            test.ok(!fs.existsSync(testFile), "Could not delete test file [" + testFile + "]");
+
             // Should not get an error
             test.fail(e);
             test.done();

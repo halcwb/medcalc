@@ -126,33 +126,34 @@
         fs.writeFileSync(custom404, expectedData);
         test.ok(fs.existsSync(custom404), "File [" + custom404 + "] should have been created");
 
-        server.stop();
-        server.start(PORT, custom404);
+        server.stop(function () {
+            server.start(PORT, custom404);
 
-        var testResponse = function (response, data) {
-            test.equals(404, response.statusCode);
-            test.equals(expectedData, data);
+            var testResponse = function (response, data) {
+                test.equals(404, response.statusCode);
+                test.equals(expectedData, data);
 
-            test.done();
+                test.done();
 
-            // Clean up test file
-            fs.unlinkSync(custom404);
-            test.ok(!fs.existsSync(custom404), "Could not delete test file [" + custom404 + "]");
-        };
+                // Clean up test file
+                fs.unlinkSync(custom404);
+                test.ok(!fs.existsSync(custom404), "Could not delete test file [" + custom404 + "]");
+            };
 
-        // Process an error
-        var processError =  function (e) {
-            // Should not get an error
-            test.fail(e);
-            test.done();
+            // Process an error
+            var processError =  function (e) {
+                // Should not get an error
+                test.fail(e);
+                test.done();
 
-            // Clean up test file
-            fs.unlinkSync(custom404);
-            test.ok(!fs.existsSync(custom404), "Could not delete test file [" + custom404 + "]");
-        };
+                // Clean up test file
+                fs.unlinkSync(custom404);
+                test.ok(!fs.existsSync(custom404), "Could not delete test file [" + custom404 + "]");
+            };
 
-        // Run the test
-        getHttp("foobar", testResponse, processError);
+            // Run the test
+            getHttp("foobar", testResponse, processError);
+        });
     };
 
     exports.setUp = function (begin) {

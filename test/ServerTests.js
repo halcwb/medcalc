@@ -108,6 +108,35 @@
         getHttp("foobar", testResponse, processError);
     };
 
+    exports.test_canServeCustom404Page =function (test) {
+        var testDir = "generated/test";
+        var testFile = testDir + "/custom404.html";
+        var expectedData = "This is custom 404 page";
+
+        // Create a custom 404 file with expected data
+        fs.writeFileSync(testFile, expectedData);
+        test.ok(fs.existsSync(testFile), "File [" + testFile + "] should have been created");
+
+        server.stop();
+        server.start(PORT, testFile);
+
+        var testResponse = function (response, data) {
+            test.equals(404, response.statusCode);
+            test.equals(expectedData, data);
+
+            test.done();
+        };
+
+        // Process an error
+        var processError =  function (e) {
+            // Should not get an error
+            test.fail(e);
+            test.done();
+        };
+
+        // Run the test
+        getHttp("foobar", testResponse, processError);
+    };
 
     exports.setUp = function (begin) {
         server.start(PORT);

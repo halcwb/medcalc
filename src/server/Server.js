@@ -13,8 +13,19 @@
     var server;
     var started = false;
 
-    exports.start = function (port) {
+    exports.start = function (port, custom404) {
+        var err404;
+
         if (!port) throw 'No port defined';
+
+        if (custom404) {
+            fs.readFile("./" + custom404, function (err, data) {
+                if (!err) {
+                    err404 = data;
+                }
+            });
+        }
+
         console.log('Server starts');
 
         server = http.createServer();
@@ -27,7 +38,8 @@
             fs.readFile("./" + url, function (err, data) {
                 if (err) {
                     response.statusCode = 404;
-                    response.end(err.toString());
+                    err404 = err404 || err.toString();
+                    response.end(err404);
                 } else {
                     response.end(data);
                 }

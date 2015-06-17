@@ -49,6 +49,7 @@
         console.log('Server is closing');
         if (server && started) {
             started = false;
+            callback = callback || function () {};
             server.close(callback);
         } else {
             throw "Server was not started or already closed";

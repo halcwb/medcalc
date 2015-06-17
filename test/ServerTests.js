@@ -60,6 +60,7 @@
         // Create a test file with expected data
         fs.writeFileSync(testFile, expectedData);
         test.ok(fs.existsSync(testFile), "File [" + testFile + "] should have been created");
+
         // Make a request
         var testResponse =  function (response, data) {
             // Clean up test file

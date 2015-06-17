@@ -6,6 +6,7 @@
     "use strict";
 
     var PORT = '3000';
+    var TESTDIR = "generated/test";
 
     var http = require('http');
     var server = require("../src/server/Server.js");
@@ -53,8 +54,7 @@
 
 
     exports.test_servesFile = function (test) {
-        var testDir = "generated/test";
-        var testFile = testDir + "/test.html";
+        var testFile = TESTDIR + "/test.html";
         var expectedData = "This is data from a file";
 
         // Create a test file with expected data
@@ -110,21 +110,20 @@
     };
 
     exports.test_canServeCustom404Page =function (test) {
-        var testDir = "generated/test";
-        var testFile = testDir + "/custom404.html";
+        var custom404 = TESTDIR + "/custom404.html";
         var expectedData = "This is custom 404 page";
 
         // Create a custom 404 file with expected data
-        fs.writeFileSync(testFile, expectedData);
-        test.ok(fs.existsSync(testFile), "File [" + testFile + "] should have been created");
+        fs.writeFileSync(custom404, expectedData);
+        test.ok(fs.existsSync(custom404), "File [" + custom404 + "] should have been created");
 
         server.stop();
-        server.start(PORT, testFile);
+        server.start(PORT, custom404);
 
         var testResponse = function (response, data) {
             // Clean up test file
-            fs.unlinkSync(testFile);
-            test.ok(!fs.existsSync(testFile), "Could not delete test file [" + testFile + "]");
+            fs.unlinkSync(custom404);
+            test.ok(!fs.existsSync(custom404), "Could not delete test file [" + custom404 + "]");
 
             test.equals(404, response.statusCode);
             test.equals(expectedData, data);
@@ -135,8 +134,8 @@
         // Process an error
         var processError =  function (e) {
             // Clean up test file
-            fs.unlinkSync(testFile);
-            test.ok(!fs.existsSync(testFile), "Could not delete test file [" + testFile + "]");
+            fs.unlinkSync(custom404);
+            test.ok(!fs.existsSync(custom404), "Could not delete test file [" + custom404 + "]");
 
             // Should not get an error
             test.fail(e);

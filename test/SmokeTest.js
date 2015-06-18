@@ -10,6 +10,8 @@
     var http = require("http");
     var spawn = require("child_process").spawn;
     var proc;
+    var fs = require('fs');
+    var parse = require("procfile").parse;
 
     exports.setUp = function (begin) {
         runServer(begin);
@@ -55,7 +57,8 @@
 
 
     var runServer = function (callback) {
-        proc = spawn("node",  ["./src/server/Start.js", PORT]);
+        var procfile = parse(fs.readFileSync("Procfile").toString());
+        proc = spawn(procfile.web.command, [procfile.web.options[0], PORT]);
 
         proc.stdout.setEncoding('utf8');
 

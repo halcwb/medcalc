@@ -9,7 +9,8 @@
   "dependencies": {
     "jake": "^8.0.12",
     "jshint": "^2.8.0",
-    "nodeunit": "^0.9.1"
+    "nodeunit": "^0.9.1",
+    "procfile": "*"
   },
   "devDependencies": {},
   "scripts": {},

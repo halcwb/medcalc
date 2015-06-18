@@ -15,6 +15,12 @@
         jake.rmRf(GENERATED);
     });
 
+    desc("Deploy to Heroku");
+    task("deploy", ["default"], function () {
+        sh("git push heroku master", function () {
+            console.log('Deployed to Heroku!');
+        });
+    });
 
     desc("Default build task");
     task("default", ["lint", "test"], function () {

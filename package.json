@@ -12,9 +12,7 @@
     "nodeunit": "^0.9.1"
   },
   "devDependencies": {},
-  "scripts": {
-//    "test": "./jake.sh"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/halcwb/medcalc.git"

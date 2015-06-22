@@ -30,17 +30,38 @@
         console.log("\n\nBuild OK\n");
     });
 
+
     desc("Lint everything");
-    task("lint", ["node-version"], function () {
-        console.log("\n\nLint is running\n");
+    task("lint", ["lint-server", "lint-client"]);
+
+    desc("Lint Server");
+    task("lint-server", ["node-version"], function () {
+        console.log("\n\nLint server is running\n");
 
         var lint = require("./build/lint/lint_runner.js");
 
         var files = new jake.FileList();
-        files.include("**/*.js");
-        files.exclude("node_modules");
-        var pass = lint.validateFileList(files.toArray(), getOptions(), getGlobals());
-        if (!pass) fail("Lint failed");
+        files.include ("**/**/*.js");
+        files.exclude("./src/client/**");
+        files.exclude("./node_modules/**");
+        files.exclude("./test/client/**");
+
+        var pass = lint.validateFileList(files.toArray(), getLintOptions_Node(), getGlobals());
+        if (!pass) fail("Lint Server failed");
+    });
+
+    desc("Lint Client");
+    task("lint-client", ["node-version"], function () {
+        console.log("\n\nLint client is running\n");
+
+        var lint = require("./build/lint/lint_runner.js");
+
+        var files = new jake.FileList();
+        files.include("./src/client/**/*.js");
+        files.include("./test/client/**/*.js");
+
+        var pass = lint.validateFileList(files.toArray(), getLintOptions_Browser(), getGlobals());
+        if (!pass) fail("Lint Client failed");
     });
 
 
@@ -127,8 +148,8 @@
     }
 
 
-    function getOptions() {
-        return {
+    function getLintOptions_Global() {
+        var options = {
             bitwise: true,
             curly: false,
             eqeqeq: true,
@@ -142,10 +163,25 @@
             regexp: true,
             undef: true,
             strict: true,
-            trailing: true,
-            node: true
+            trailing: true
         };
+        return options;
     }
+
+
+    function getLintOptions_Node() {
+        var options = getLintOptions_Global();
+        options.node = true;
+        return options;
+    }
+
+
+    function getLintOptions_Browser() {
+        var options = getLintOptions_Global();
+        options.browser = true;
+        return options;
+    }
+
 
     function getGlobals() {
         return {

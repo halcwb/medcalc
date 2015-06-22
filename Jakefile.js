@@ -64,7 +64,7 @@
     task("test-client", ["node-version", TEMP_TEST_DIR], function () {
         var message = 'client code tests failed';
         console.log("\n\nStart testing client\n");
-        sh('./karma.sh run', message, function (stdout) {
+        sh('node ./node_modules/karma/bin/karma run', message, function (stdout) {
             if (stdout.indexOf(message) !== -1) fail('client tests fail!', message);
             complete();
         });
@@ -90,7 +90,6 @@
 
     // desc("Check node version");
     task("node-version", [], function () {
-        var message =
         console.log("\nChecking node version\n");
 
         sh("node --version", '', function (version) {

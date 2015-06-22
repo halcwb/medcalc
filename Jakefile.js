@@ -23,12 +23,12 @@
     });
 
     desc("Default build task");
-    task("default", ["lint", "test"], function () {
+    task("default", ["lint", "test", "clean"], function () {
         console.log("\n\nBuild OK\n");
     });
 
     desc("Lint everything");
-    task("lint", ["node"], function () {
+    task("lint", ["node-version"], function () {
         console.log("\n\nLint is running\n");
 
         var lint = require("./build/lint/lint_runner.js");
@@ -40,15 +40,24 @@
         if (!pass) fail("Lint failed");
     });
 
-    desc("Test everything");
-    task("test", ["node", TEMP_TEST_DIR], function () {
-        console.log("\n\nStart testing");
+    desc("Test Everything");
+    task("test", ["test-server", "test-client"]);
+
+    desc("Test Server Code");
+    task("test-server", ["node-version", TEMP_TEST_DIR], function () {
+        console.log("\n\nStart testing server");
         var reporter = require("nodeunit").reporters.default;
         reporter.run(['test/server'], null, function (failures) {
                 if (failures) fail('tests fail!', failures);
                 complete();
             }
         );
+    }, {async: true});
+
+    desc("Test Client Code");
+    task("test-client", ["node-version", TEMP_TEST_DIR], function () {
+        console.log("\n\nStart testing client");
+
     }, {async: true});
 
     desc("Integrate");
@@ -69,7 +78,7 @@
     });
 
     // desc("Check node version");
-    task("node", [], function () {
+    task("node-version", [], function () {
         console.log("\nChecking node version\n");
 
         sh("node --version", function (version) {

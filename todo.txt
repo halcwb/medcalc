@@ -32,6 +32,7 @@ To Do on current task:
 - Config karma to test in multiple browsers
 - Move karma config file to a better spot
 - Unify test file configuration (jake and karma)
+- Setup client side linting options
 
 
 Future ideas:

@@ -9,7 +9,7 @@
     var TESTDIR = "generated/test";
 
     var http = require('http');
-    var server = require("../src/server/Server.js");
+    var server = require("../../src/server/Server.js");
 
     var fs = require('fs');
 

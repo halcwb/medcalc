@@ -44,7 +44,7 @@
     task("test", ["node", TEMP_TEST_DIR], function () {
         console.log("\n\nStart testing");
         var reporter = require("nodeunit").reporters.default;
-        reporter.run(['test'], null, function (failures) {
+        reporter.run(['test/server'], null, function (failures) {
                 if (failures) fail('tests fail!', failures);
                 complete();
             }

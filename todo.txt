@@ -29,6 +29,10 @@ Engineering tasks:
 - Client side testing
 
 To Do on current task:
+- Config karma to test in multiple browsers
+- Move karma config file to a better spot
+- Unify test file configuration (jake and karma)
+
 
 Future ideas:
 - Create fail fast code

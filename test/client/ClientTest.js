@@ -2,13 +2,17 @@
  * Created by halcwb on 22/06/15.
  */
 
-/* global dump */
+/* global dump, chai */
 "use strict";
+
+var assert = chai.assert;
+var expect = chai.expect;
 
 describe("Hello World", function () {
 
     it("should run", function () {
-        dump("Hello World");
+        assert.equal('bar', 'bar');
+        expect('foo').to.equal('foo');
     });
 
 });

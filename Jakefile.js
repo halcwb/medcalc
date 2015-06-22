@@ -10,17 +10,20 @@
 
     directory(TEMP_TEST_DIR);
 
+
     desc("Remove all generated files");
     task("clean", [], function () {
         jake.rmRf(GENERATED);
     });
 
+
     desc("Deploy to Heroku");
     task("deploy", ["default"], function () {
-        sh("git push heroku master", function () {
+        sh("git push heroku master", '', function () {
             console.log('Deployed to Heroku!');
         });
     });
+
 
     desc("Default build task");
     task("default", ["lint", "test", "clean"], function () {
@@ -40,25 +43,33 @@
         if (!pass) fail("Lint failed");
     });
 
+
     desc("Test Everything");
     task("test", ["test-server", "test-client"]);
+
 
     desc("Test Server Code");
     task("test-server", ["node-version", TEMP_TEST_DIR], function () {
         console.log("\n\nStart testing server");
         var reporter = require("nodeunit").reporters.default;
         reporter.run(['test/server'], null, function (failures) {
-                if (failures) fail('tests fail!', failures);
+                if (failures) fail('server tests fail!', failures);
                 complete();
             }
         );
-    }, {async: true});
+    }, { async: true });
+
 
     desc("Test Client Code");
     task("test-client", ["node-version", TEMP_TEST_DIR], function () {
-        console.log("\n\nStart testing client");
+        var message = 'client code tests failed';
+        console.log("\n\nStart testing client\n");
+        sh('./karma.sh run', message, function (stdout) {
+            if (stdout.indexOf(message) !== -1) fail('client tests fail!', message);
+            complete();
+        });
+    }, { async: true });
 
-    }, {async: true});
 
     desc("Integrate");
     task("integrate", ["default"], function () {
@@ -79,9 +90,10 @@
 
     // desc("Check node version");
     task("node-version", [], function () {
+        var message =
         console.log("\nChecking node version\n");
 
-        sh("node --version", function (version) {
+        sh("node --version", '', function (version) {
             if (version.trim() !== NODE_VERSION) {
                 fail("Not the right version: " + version +
                     "should be: " + NODE_VERSION);
@@ -92,13 +104,26 @@
     }, {async: true});
 
 
-    function sh(cmd, callback) {
+    function sh(cmd, errMessage, callback) {
         console.log("> " + cmd);
-        var process = jake.createExec([cmd], {printStderr: true});
-        process.addListener('stdout', function (buffer) {
-            var version = buffer.toString('ascii');
-            callback(version);
+
+        var process = jake.createExec([cmd], { printStderr: false });
+        var stdout = "";
+
+        process.on('error', function () {
+            console.log(stdout);
+            callback(errMessage);
         });
+
+        process.on('stdout', function (buffer) {
+            stdout += buffer;
+        });
+
+        process.on('cmdEnd', function () {
+            console.log(stdout);
+            callback(stdout);
+        });
+
         process.run();
     }
 

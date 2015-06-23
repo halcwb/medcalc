@@ -181,7 +181,7 @@
             return true;
         }
         else {
-            fail('Browser was not tested: ' + browser);
+            console.log('Browser was not tested: ' + browser);
             return false;
         }
     }

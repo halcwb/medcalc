@@ -6,6 +6,13 @@
     var GENERATED = "generated";
     var TEMP_TEST_DIR = GENERATED + "/test";
 
+    var BROWSERS = [
+        'Chrome',
+        'Safari',
+        'Firefox',
+        'IE'
+    ];
+
     var NODE_VERSION =  "v0.12.4";
 
     directory(TEMP_TEST_DIR);
@@ -34,33 +41,27 @@
     desc("Lint everything");
     task("lint", ["lint-server", "lint-client"]);
 
+
     desc("Lint Server");
     task("lint-server", ["node-version"], function () {
         console.log("\n\nLint server is running\n");
 
-        var lint = require("./build/lint/lint_runner.js");
+        var validate = require("./build/lint/lint_runner.js").validateFileList;
 
-        var files = new jake.FileList();
-        files.include ("**/**/*.js");
-        files.exclude("./src/client/**");
-        files.exclude("./node_modules/**");
-        files.exclude("./test/client/**");
+        var pass = validate(getServerFiles(), getLintOptions_Node(), getGlobals());
 
-        var pass = lint.validateFileList(files.toArray(), getLintOptions_Node(), getGlobals());
         if (!pass) fail("Lint Server failed");
     });
+
 
     desc("Lint Client");
     task("lint-client", ["node-version"], function () {
         console.log("\n\nLint client is running\n");
 
-        var lint = require("./build/lint/lint_runner.js");
+        var validate = require("./build/lint/lint_runner.js").validateFileList;
 
-        var files = new jake.FileList();
-        files.include("./src/client/**/*.js");
-        files.include("./test/client/**/*.js");
+        var pass = validate(getClientFiles(), getLintOptions_Browser(), getGlobals());
 
-        var pass = lint.validateFileList(files.toArray(), getLintOptions_Browser(), getGlobals());
         if (!pass) fail("Lint Client failed");
     });
 
@@ -72,23 +73,34 @@
     desc("Test Server Code");
     task("test-server", ["node-version", TEMP_TEST_DIR], function () {
         console.log("\n\nStart testing server");
+
         var reporter = require("nodeunit").reporters.default;
+
         reporter.run(['test/server'], null, function (failures) {
                 if (failures) fail('server tests fail!', failures);
                 complete();
             }
         );
+
     }, { async: true });
 
 
     desc("Test Client Code");
     task("test-client", ["node-version", TEMP_TEST_DIR], function () {
         var message = 'client code tests failed';
+
         console.log("\n\nStart testing client\n");
+
         sh('node ./node_modules/karma/bin/karma run', message, function (stdout) {
             if (stdout.indexOf(message) !== -1) fail('client tests fail!', message);
+
+            BROWSERS.forEach(function (browser) {
+                assertBrowserTested(stdout, browser);
+            });
+
             complete();
         });
+
     }, { async: true });
 
 
@@ -145,6 +157,37 @@
         });
 
         process.run();
+    }
+
+
+    function assertBrowserTested (output, browser) {
+        if (output.indexOf(browser) !== -1)  {
+            return true;
+        }
+        else {
+            fail('Browser was not tested: ' + browser);
+            return false;
+        }
+    }
+
+
+    function getServerFiles() {
+        var files = new jake.FileList();
+        files.include("**/**/*.js");
+        files.exclude("./src/client/**");
+        files.exclude("./node_modules/**");
+        files.exclude("./test/client/**");
+
+        return files.toArray();
+    }
+
+
+    function getClientFiles() {
+        var files = new jake.FileList();
+        files.include("./src/client/**/*.js");
+        files.include("./test/client/**/*.js");
+
+        return files.toArray();
     }
 
 

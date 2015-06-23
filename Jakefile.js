@@ -6,6 +6,13 @@
     var GENERATED = "generated";
     var TEMP_TEST_DIR = GENERATED + "/test";
 
+    var BROWSERS = [
+        'Chrome',
+        'Safari',
+        'Firefox',
+        'IE'
+    ];
+
     var NODE_VERSION =  "v0.12.4";
 
     directory(TEMP_TEST_DIR);
@@ -30,17 +37,32 @@
         console.log("\n\nBuild OK\n");
     });
 
+
     desc("Lint everything");
-    task("lint", ["node-version"], function () {
-        console.log("\n\nLint is running\n");
+    task("lint", ["lint-server", "lint-client"]);
 
-        var lint = require("./build/lint/lint_runner.js");
 
-        var files = new jake.FileList();
-        files.include("**/*.js");
-        files.exclude("node_modules");
-        var pass = lint.validateFileList(files.toArray(), getOptions(), getGlobals());
-        if (!pass) fail("Lint failed");
+    desc("Lint Server");
+    task("lint-server", ["node-version"], function () {
+        console.log("\n\nLint server is running\n");
+
+        var validate = require("./build/lint/lint_runner.js").validateFileList;
+
+        var pass = validate(getServerFiles(), getLintOptions_Node(), getGlobals());
+
+        if (!pass) fail("Lint Server failed");
+    });
+
+
+    desc("Lint Client");
+    task("lint-client", ["node-version"], function () {
+        console.log("\n\nLint client is running\n");
+
+        var validate = require("./build/lint/lint_runner.js").validateFileList;
+
+        var pass = validate(getClientFiles(), getLintOptions_Browser(), getGlobals());
+
+        if (!pass) fail("Lint Client failed");
     });
 
 
@@ -48,26 +70,53 @@
     task("test", ["test-server", "test-client"]);
 
 
+    desc("Start Karma");
+    task("start-karma", [], function () {
+        var message = 'starting karma failed';
+
+        console.log("\n\nStart testing client\n");
+
+        sh('node ./node_modules/karma/bin/karma start build/karma.conf.js', message, function (stdout) {
+            if (stdout.indexOf(message) !== -1) fail(message);
+            console.log(stdout);
+
+            complete();
+        });
+
+    }, { async: true });
+
+
     desc("Test Server Code");
     task("test-server", ["node-version", TEMP_TEST_DIR], function () {
         console.log("\n\nStart testing server");
+
         var reporter = require("nodeunit").reporters.default;
+
         reporter.run(['test/server'], null, function (failures) {
                 if (failures) fail('server tests fail!', failures);
                 complete();
             }
         );
+
     }, { async: true });
 
 
     desc("Test Client Code");
     task("test-client", ["node-version", TEMP_TEST_DIR], function () {
         var message = 'client code tests failed';
+
         console.log("\n\nStart testing client\n");
-        sh('node ./node_modules/karma/bin/karma run', message, function (stdout) {
+
+        sh('node ./node_modules/karma/bin/karma run build/karma.conf.js', message, function (stdout) {
             if (stdout.indexOf(message) !== -1) fail('client tests fail!', message);
+
+            BROWSERS.forEach(function (browser) {
+                assertBrowserTested(stdout, browser);
+            });
+
             complete();
         });
+
     }, { async: true });
 
 
@@ -127,8 +176,39 @@
     }
 
 
-    function getOptions() {
-        return {
+    function assertBrowserTested (output, browser) {
+        if (output.indexOf(browser) !== -1)  {
+            return true;
+        }
+        else {
+            console.log('Browser was not tested: ' + browser);
+            return false;
+        }
+    }
+
+
+    function getServerFiles() {
+        var files = new jake.FileList();
+        files.include("**/**/*.js");
+        files.exclude("./src/client/**");
+        files.exclude("./node_modules/**");
+        files.exclude("./test/client/**");
+
+        return files.toArray();
+    }
+
+
+    function getClientFiles() {
+        var files = new jake.FileList();
+        files.include("./src/client/**/*.js");
+        files.include("./test/client/**/*.js");
+
+        return files.toArray();
+    }
+
+
+    function getLintOptions_Global() {
+        var options = {
             bitwise: true,
             curly: false,
             eqeqeq: true,
@@ -142,10 +222,25 @@
             regexp: true,
             undef: true,
             strict: true,
-            trailing: true,
-            node: true
+            trailing: true
         };
+        return options;
     }
+
+
+    function getLintOptions_Node() {
+        var options = getLintOptions_Global();
+        options.node = true;
+        return options;
+    }
+
+
+    function getLintOptions_Browser() {
+        var options = getLintOptions_Global();
+        options.browser = true;
+        return options;
+    }
+
 
     function getGlobals() {
         return {

@@ -3,12 +3,12 @@
  */
 
 /* global dump, chai */
-"use strict";
 
 var assert = chai.assert;
 var expect = chai.expect;
 
 describe("Hello World", function () {
+    "use strict";
 
     it("should run", function () {
         assert.equal('bar', 'bar');

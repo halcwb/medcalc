@@ -70,6 +70,22 @@
     task("test", ["test-server", "test-client"]);
 
 
+    desc("Start Karma");
+    task("start-karma", [], function () {
+        var message = 'starting karma failed';
+
+        console.log("\n\nStart testing client\n");
+
+        sh('node ./node_modules/karma/bin/karma start build/karma.conf.js', message, function (stdout) {
+            if (stdout.indexOf(message) !== -1) fail(message);
+            console.log(stdout);
+
+            complete();
+        });
+
+    }, { async: true });
+
+
     desc("Test Server Code");
     task("test-server", ["node-version", TEMP_TEST_DIR], function () {
         console.log("\n\nStart testing server");
@@ -91,7 +107,7 @@
 
         console.log("\n\nStart testing client\n");
 
-        sh('node ./node_modules/karma/bin/karma run', message, function (stdout) {
+        sh('node ./node_modules/karma/bin/karma run build/karma.conf.js', message, function (stdout) {
             if (stdout.indexOf(message) !== -1) fail('client tests fail!', message);
 
             BROWSERS.forEach(function (browser) {

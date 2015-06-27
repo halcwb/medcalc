@@ -15,7 +15,8 @@ User Stories:
 * Serve 404 for everything else
 * Marketing copy
 * Publish to internet
-- Support multiple browsers
+* Support multiple browsers
+- Have a welcome screen
 - Add patient details
 
 Engineering tasks:
@@ -26,14 +27,16 @@ Engineering tasks:
 -> Server side testing
 -> Serve a file
 -> Create very simple http server
-- Client side testing
+-> Client side testing
+-> Use a widget library, i.e. webix
+- Install a logging framework, to enable file logging
+- Smoke test that webix is actually loaded
+- Smoke test that welcome screen is there
 
 To Do on current task:
-- Config karma to test in multiple browsers
-- Move karma config file to a better spot
 - Unify test file configuration (jake and karma)
-- Setup client side linting options
-
+- Create a simple welcome screen
+- Factor out global lint variables
 
 Future ideas:
 - Create fail fast code

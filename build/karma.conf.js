@@ -18,7 +18,9 @@ module.exports = function(config) {
     files: [
         './node_modules/chai/chai.js',
         './test/client/**/*.js',
-        './src/client/**/*.js'
+        './src/client/**/*.js',
+        './vendor/**/webix.css',
+        './vendor/**/webix.js'
     ],
 
 

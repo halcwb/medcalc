@@ -193,6 +193,7 @@
         files.exclude("./src/client/**");
         files.exclude("./node_modules/**");
         files.exclude("./test/client/**");
+        files.exclude("./vendor/**/**");
 
         return files.toArray();
     }

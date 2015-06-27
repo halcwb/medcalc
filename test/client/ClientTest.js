@@ -2,7 +2,7 @@
  * Created by halcwb on 22/06/15.
  */
 
-/* global dump, chai, medcalc*/
+/* global dump, chai, webix, medcalc*/
 
 var assert = chai.assert;
 var expect = chai.expect;
@@ -30,6 +30,10 @@ describe("Medcalc", function () {
         medcalc.init();
         var div = document.getElementById('init');
         expect(div).to.be.ok;
+    });
+
+    it('should have webix loaded', function () {
+       expect(webix).to.be.ok;
     });
 
 });

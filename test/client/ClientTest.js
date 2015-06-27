@@ -1,7 +1,6 @@
 /**
  * Created by halcwb on 22/06/15.
  */
-/*jshint -W030 */
 
 /* global dump, chai, medcalc*/
 

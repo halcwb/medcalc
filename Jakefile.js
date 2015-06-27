@@ -238,6 +238,7 @@
     function getLintOptions_Browser() {
         var options = getLintOptions_Global();
         options.browser = true;
+        options.expr = true;
         return options;
     }
 

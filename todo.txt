@@ -16,6 +16,7 @@ User Stories:
 * Marketing copy
 * Publish to internet
 * Support multiple browsers
+- Have a welcome screen
 - Add patient details
 
 Engineering tasks:
@@ -28,11 +29,14 @@ Engineering tasks:
 -> Create very simple http server
 -> Client side testing
 -> Use a widget library, i.e. webix
+- Install a logging framework, to enable file logging
 - Smoke test that webix is actually loaded
+- Smoke test that welcome screen is there
 
 To Do on current task:
 - Unify test file configuration (jake and karma)
--
+- Create a simple welcome screen
+- Factor out global lint variables
 
 Future ideas:
 - Create fail fast code

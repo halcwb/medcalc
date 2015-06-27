@@ -110,6 +110,8 @@
         sh('node ./node_modules/karma/bin/karma run build/karma.conf.js', message, function (stdout) {
             if (stdout.indexOf(message) !== -1) fail('client tests fail!', message);
 
+            console.log(stdout);
+
             BROWSERS.forEach(function (browser) {
                 assertBrowserTested(stdout, browser);
             });
@@ -168,7 +170,6 @@
         });
 
         process.on('cmdEnd', function () {
-            console.log(stdout);
             callback(stdout);
         });
 
